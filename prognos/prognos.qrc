@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="actions">
+    <file>images/weather-clear-night.png</file>
+    <file>images/weather-clear.png</file>
+    <file>images/weather-clouds-night.png</file>
+    <file>images/weather-clouds.png</file>
+    <file>images/weather-few-clouds-night.png</file>
+    <file>images/weather-few-clouds.png</file>
+    <file>images/weather-many-clouds.png</file>
+    <file>images/weather-mist.png</file>
+    <file>images/weather-none-available.png</file>
+    <file>images/weather-showers-day.png</file>
+    <file>images/weather-showers-night.png</file>
+    <file>images/weather-showers-scattered-day.png</file>
+    <file>images/weather-showers-scattered-night.png</file>
+    <file>images/weather-showers-scattered.png</file>
+    <file>images/weather-storm-day.png</file>
+    <file>images/weather-storm-night.png</file>
+  </qresource>
+</RCC>

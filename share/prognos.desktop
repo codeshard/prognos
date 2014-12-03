@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Prognos
+GenericName=Weather Status Monitoring Application for Cuba
+GenericName[es]=Monitorea el Estado del Tiempo en Cuba
+Comment=Weather Status Monitoring Application for Cuba
+Comment[es]=Monitorea el Estado del Tiempo en Cuba
+Exec=prognos
+Icon=prognos
+Terminal=false
+StartupNotify=false
+Categories=Qt;Network;
