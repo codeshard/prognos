@@ -190,10 +190,10 @@ class Prognos(QtGui.QMainWindow):
         event.accept()
 
     def get_current_date(self):
-        week_day = time.strftime("%A")
-        month = time.strftime("%b")
-        day = time.strftime("%d")
-        self.label_date.setText(str(week_day) + ", " + str(month) + " " + str(day))
+        self.week_day = time.strftime("%A")
+        self.month = time.strftime("%b")
+        self.day = time.strftime("%d")
+        self.label_date.setText(str(self.week_day) + ", " + str(self.month) + " " + str(self.day))
 
     def gather_data(self):
         settings = QtCore.QSettings(
@@ -306,6 +306,7 @@ class Prognos(QtGui.QMainWindow):
             settings.endGroup()
 
     def options(self):
+        print self.week_day
         opt = OptionsDialog(self)
         opt.show()
 
