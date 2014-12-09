@@ -201,90 +201,7 @@ class Prognos(QtGui.QMainWindow):
         self.label_date.setText(str(self.week_day) + ", " + str(self.month) + " " + str(self.day))
 
     def gather_data(self):
-        settings = QtCore.QSettings(
-            QtCore.QDir.homePath() + '/.prognos/config.ini',
-            QtCore.QSettings.IniFormat)
-        last_day = settings.value("Weather/current_month_day").toString()
-        prov = settings.value("location").toString()
-        temperature = settings.value("temperature").toString()
-        language = settings.value("language").toString()
-        proxy = settings.value("proxy").toString()
-        host = settings.value("host").toString()
-        port = settings.value("port").toString()
-        user = settings.value("user").toString()
-        passwd = settings.value("passwd").toString()
-        self.cw.proxy_authenticate(host, port, user, passwd)
-        self.cw.fetch_weather(u'' + self.location.locations[str(prov)])
-        day_hour  = time.strftime("%H")
-        if day_hour > '01' and day_hour < '18':
-            self.label_temperature.setText(_translate(None, str(self.cw.weather_data['current_day_temp']) + "°C", None))
-        else:
-            self.label_temperature.setText(_translate(None, str(self.cw.weather_data['current_night_temp']) + "°C", None))
-        self.label_weather_status.setText(_translate(None, str(self.cw.weather_data['current_day_weather']), None))
-        self.setWindowTitle(str(prov))
-        icon = QtGui.QIcon()
-        if str(self.cw.weather_data['current_day_weather']) == 'Lluvias Ocasionales':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Lluvias dispersas':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Lluvias aisladas':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Lluvias en la Tarde':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-night.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-night.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-night.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Chubascos':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-day.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-showers-day.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Parcialmente Nublado':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-few-clouds.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-few-clouds.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-few-clouds.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Nublado':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-many-clouds.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-many-clouds.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-many-clouds.png"
-
-        if str(self.cw.weather_data['current_day_weather']) == 'Soleado':
-            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-clear.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.setWindowIcon(icon)
-            self.trayIcon.setIcon(icon)
-            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-clear.png"))
-            self.label_weather_image.filename = ":/actions/images/weather-clear.png"
-
-        settings.beginGroup("Weather")
-        settings.setValue("current_day_temp", int(self.cw.weather_data['current_day_temp']))
-        settings.setValue("current_night_temp", int(self.cw.weather_data['current_night_temp']))
-        settings.setValue("current_day_weather", str(self.cw.weather_data['current_day_weather']))
-        settings.setValue("weather_pixmap", str(self.label_weather_image.filename))
-        settings.endGroup()
+        pass
 
     def load_data(self):
         settings = QtCore.QSettings(
@@ -324,7 +241,12 @@ class Prognos(QtGui.QMainWindow):
         opt.show()
 
     def extended(self):
+        settings = QtCore.QSettings(
+            QtCore.QDir.homePath() + '/.prognos/config.ini',
+            QtCore.QSettings.IniFormat)
+        prov = settings.value("location").toString()
         ext = ExtendedDialog(self)
+        ext.load_data(prov)
         ext.show()
 
     def about(self):

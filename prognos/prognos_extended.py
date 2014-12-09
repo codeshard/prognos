@@ -22,6 +22,8 @@
 
 from PyQt4 import QtCore, QtGui
 
+from database import PrognosDB
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -50,6 +52,8 @@ class ExtendedDialog(QtGui.QDialog):
         self.label.setText(_translate(None, "Pronóstico Extendido", None))
         self.verticalLayout.addWidget(self.label)
         self.tableWidget = QtGui.QTableWidget(self)
+        self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tableWidget.setColumnCount(4)
         self.tableWidget.setRowCount(0)
         item = QtGui.QTableWidgetItem()
@@ -77,3 +81,30 @@ class ExtendedDialog(QtGui.QDialog):
         item.setText(_translate(None, "T Mínima", None))
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate(None, "Pronóstico", None))
+
+    def load_data(self, location):
+        db = PrognosDB()
+        db.create_connection()
+        data = db.select_query(location)
+        i = self.tableWidget.rowCount()
+        self.tableWidget.setRowCount(i + len(data))
+        for row in data:
+
+            item = QtGui.QTableWidgetItem()
+            item.setText(str(row[3]))
+            self.tableWidget.setItem(i, 0, item)
+
+            item = QtGui.QTableWidgetItem()
+            item.setText(str(row[5]))
+            self.tableWidget.setItem(i, 1, item)
+
+            item = QtGui.QTableWidgetItem()
+            item.setText(str(row[6]))
+            self.tableWidget.setItem(i, 2, item)
+
+            item = QtGui.QTableWidgetItem()
+            item.setText(str(row[7]))
+            self.tableWidget.setItem(i, 3, item)
+            i += 1
+
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)

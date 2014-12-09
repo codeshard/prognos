@@ -55,9 +55,16 @@ class PrognosDB(object):
         self.connection.commit()
 
     def select_query(self, params):
-        cmd = ("SELECT {p} FROM Prognos").format(p=params)
-        return self.cur.execute(cmd)
+        cmd = ("SELECT *  FROM 'main'.'prognos' WHERE location = '{p}';").format(p=params)
+        data = self.cur.execute(cmd)
+        return data.fetchall()
 
     def close_connection(self):
         if self.connection:
             self.connection.close()
+
+if __name__ == '__main__':
+    db = PrognosDB()
+    db.create_connection()
+    for row in db.select_query('Varadero'):
+        print row
