@@ -79,12 +79,3 @@ class CubanWeather(object):
             ]
         self.db.insert_query(store_data)
         return self.weather_data
-
-if __name__ == '__main__':
-    host = '172.19.208.1'
-    port = '8080'
-    user = 'ozkar'
-    passwd = 'rammstein'
-    cw = CubanWeather()
-    cw.proxy_authenticate(host, port, user, passwd)
-    cw.fetch_weather(u'CAMAGÜEY')
