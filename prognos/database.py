@@ -62,9 +62,3 @@ class PrognosDB(object):
     def close_connection(self):
         if self.connection:
             self.connection.close()
-
-if __name__ == '__main__':
-    db = PrognosDB()
-    db.create_connection()
-    for row in db.select_query('Varadero'):
-        print row
