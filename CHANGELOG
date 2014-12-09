@@ -14,3 +14,4 @@
 - Redefined database structure
 - Fixed unicode errors according to http://docs.python.org/howto/unicode.html
 - Changed window title to uppercase(i'm to lazy)
+- Working in offline version.
