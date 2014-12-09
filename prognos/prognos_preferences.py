@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 """
-   dialog.py
+   prognos_preferences.py
 
    Copyright 2014 Ozkar L. Garcell <ozkar.garcell@gmail.com>
 

@@ -1,0 +1,4 @@
+ - Historical data(perhaps sqlite?).*
+ - Add tooltips to the systray icon.
+ - Validate measurements with current system date.
+ - Read current day and 3 days on.

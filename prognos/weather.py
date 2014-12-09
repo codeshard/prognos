@@ -21,13 +21,22 @@
 """
 
 import re
+import time
 import urllib2
 from lxml import etree
+
+from database import PrognosDB
 
 
 class CubanWeather(object):
     def __init__(self):
         self.weather_data = {}
+        self.db = PrognosDB()
+        self.db.create_connection()
+        self.db.create_table()
+        self.year = time.strftime("%Y")
+        self.month = time.strftime("%m")
+        self.day = time.strftime("%d")
 
     def proxy_authenticate(self, host, port, user, passwd):
         cmd = ''.join([
@@ -43,8 +52,6 @@ class CubanWeather(object):
         urllib2.install_opener(opener)
 
     def fetch_weather(self, location):
-        title = ''
-        description = ''
         values = []
         conn = urllib2.urlopen(u'http://www.met.inf.cu/asp/genesis.asp?TB0=RSSFEED')
         t_data = conn.read()
@@ -52,8 +59,8 @@ class CubanWeather(object):
         t_root = etree.fromstring(t_data)
         item = t_root.findall('channel/title')
         for item in t_root.xpath('/rss/channel/item'):
-            if item.xpath("./title/text()")[0] == location:
-                title = item.xpath("./title/text()")[0]
+            if item.xpath(u"./title/text()")[0] == location:
+                title = item.xpath(u"./title/text()")[0]
                 description = item.xpath("./description/text()")[0]
                 dataCrop = re.findall(r'<td>\W*?.*?</td>', description)
                 for data in dataCrop:
@@ -63,4 +70,21 @@ class CubanWeather(object):
         self.weather_data['current_day_temp'] = values[1]
         self.weather_data['current_night_temp'] = values[2]
         self.weather_data['current_day_weather'] = values[3]
+        store_data = [
+            (int(self.year), int(self.month), int(values[0]), title.encode('utf-8').title(), int(values[1]), int(values[2]), str(values[3])),
+            (int(self.year), int(self.month), int(values[4]), title.encode('utf-8').title(), int(values[5]), int(values[6]), str(values[7])),
+            (int(self.year), int(self.month), int(values[8]), title.encode('utf-8').title(), int(values[9]), int(values[10]), str(values[11])),
+            (int(self.year), int(self.month), int(values[12]), title.encode('utf-8').title(), int(values[13]), int(values[14]), str(values[15])),
+            (int(self.year), int(self.month), int(values[16]), title.encode('utf-8').title(), int(values[17]), int(values[18]), str(values[19])),
+            ]
+        self.db.insert_query(store_data)
         return self.weather_data
+
+if __name__ == '__main__':
+    host = '172.19.208.1'
+    port = '8080'
+    user = 'ozkar'
+    passwd = 'rammstein'
+    cw = CubanWeather()
+    cw.proxy_authenticate(host, port, user, passwd)
+    cw.fetch_weather(u'CAMAGÜEY')

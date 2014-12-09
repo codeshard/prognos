@@ -27,6 +27,7 @@ from PyQt4 import QtCore, QtGui
 
 import prognos_qrc
 from prognos_preferences import OptionsDialog
+from prognos_extended import ExtendedDialog
 from conditions import Locations
 from weather import CubanWeather
 
@@ -43,6 +44,7 @@ try:
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
+
 
 class Prognos(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -114,17 +116,19 @@ class Prognos(QtGui.QMainWindow):
         self.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
     def create_tray_icon(self):
-         self.trayIconMenu = QtGui.QMenu(self)
-         self.trayIconMenu.addAction(self.minimize_action)
-         self.trayIconMenu.addAction(self.restore_action)
-         self.trayIconMenu.addAction(self.refresh_action)
-         self.trayIconMenu.addAction(self.extended_action)
-         self.trayIconMenu.addAction(self.options_action)
-         self.trayIconMenu.addAction(self.about_action)
-         self.trayIconMenu.addSeparator()
-         self.trayIconMenu.addAction(self.quit_action)
-         self.trayIcon = QtGui.QSystemTrayIcon(self)
-         self.trayIcon.setContextMenu(self.trayIconMenu)
+        self.trayIconMenu = QtGui.QMenu(self)
+        self.trayIconMenu.addAction(self.minimize_action)
+        self.trayIconMenu.addAction(self.restore_action)
+        self.trayIconMenu.addAction(self.refresh_action)
+        self.trayIconMenu.addAction(self.extended_action)
+        self.trayIconMenu.addAction(self.options_action)
+        self.trayIconMenu.addAction(self.about_action)
+        self.trayIconMenu.addSeparator()
+        self.trayIconMenu.addAction(self.quit_action)
+        self.trayIcon = QtGui.QSystemTrayIcon(self)
+        self.trayIcon.setContextMenu(self.trayIconMenu)
+        #self.trayIcon.activated.connect(self.tooltip_message)
+        self.trayIcon.setToolTip('<img src=":/actions/images/weather-clear.png" width="48" height="48"/>')
 
     def create_actions(self):
         self.minimize_action = QtGui.QAction(
@@ -145,7 +149,8 @@ class Prognos(QtGui.QMainWindow):
         self.extended_action = QtGui.QAction(
             self.style().standardIcon(QtGui.QStyle.SP_ComputerIcon),
             self.tr(u'Pronóstico'),
-            self)
+            self,
+            triggered=self.extended)
         self.options_action = QtGui.QAction(
             self.style().standardIcon(QtGui.QStyle.SP_FileDialogDetailedView),
             self.tr(u'Opciones'),
@@ -199,6 +204,7 @@ class Prognos(QtGui.QMainWindow):
         settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
+        last_day = settings.value("Weather/current_month_day").toString()
         prov = settings.value("location").toString()
         temperature = settings.value("temperature").toString()
         language = settings.value("language").toString()
@@ -208,7 +214,7 @@ class Prognos(QtGui.QMainWindow):
         user = settings.value("user").toString()
         passwd = settings.value("passwd").toString()
         self.cw.proxy_authenticate(host, port, user, passwd)
-        self.cw.fetch_weather(self.location.locations[str(prov)])
+        self.cw.fetch_weather(u'' + self.location.locations[str(prov)])
         day_hour  = time.strftime("%H")
         if day_hour > '01' and day_hour < '18':
             self.label_temperature.setText(_translate(None, str(self.cw.weather_data['current_day_temp']) + "°C", None))
@@ -218,6 +224,13 @@ class Prognos(QtGui.QMainWindow):
         self.setWindowTitle(str(prov))
         icon = QtGui.QIcon()
         if str(self.cw.weather_data['current_day_weather']) == 'Lluvias Ocasionales':
+            icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.setWindowIcon(icon)
+            self.trayIcon.setIcon(icon)
+            self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
+            self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
+
+        if str(self.cw.weather_data['current_day_weather']) == 'Lluvias dispersas':
             icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.setWindowIcon(icon)
             self.trayIcon.setIcon(icon)
@@ -299,6 +312,7 @@ class Prognos(QtGui.QMainWindow):
             QtCore.QSettings.IniFormat)
         if self.cw.weather_data:
             settings.beginGroup("Weather")
+            settings.setValue("current_month_day", str(self.cw.weather_data['current_month_day']))
             settings.setValue("current_day_temp", int(self.cw.weather_data['current_day_temp']))
             settings.setValue("current_night_temp", int(self.cw.weather_data['current_night_temp']))
             settings.setValue("current_day_weather", str(self.cw.weather_data['current_day_weather']))
@@ -306,9 +320,12 @@ class Prognos(QtGui.QMainWindow):
             settings.endGroup()
 
     def options(self):
-        print self.week_day
         opt = OptionsDialog(self)
         opt.show()
+
+    def extended(self):
+        ext = ExtendedDialog(self)
+        ext.show()
 
     def about(self):
         QtGui.QMessageBox.about(

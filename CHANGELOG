@@ -1,2 +1,16 @@
 2014-12-03 v0.1
 - Initial version
+
+2014-12-05
+- Added sqlite3 database support
+- Fixed minor issues
+
+2014-12-08
+- Reasembled database storage of measurements
+- Trying to define a tooltip
+- Fixed minor issues
+
+2014-12-09
+- Redefined database structure
+- Fixed unicode errors according to http://docs.python.org/howto/unicode.html
+- Changed window title to uppercase(i'm to lazy)

@@ -25,10 +25,10 @@ class Locations(object):
     def __init__(self):
         self.locations = {
             'Pinar del Rio': u'Pronóstico Extendido del Tiempo por Ciudades',
-            'La Habana': 'LA HABANA',
-            'Varadero': 'VARADERO',
-            'Cienfuegos': 'CIENFUEGOS',
-            'Cayo Coco': 'CAYO COCO',
-            u'Camaguey': u'CAMAGÜEY',
-            'Holguin': 'HOLGUIN',
-            'Santiago de Cuba': 'SANTIAGO DE CUBA'}
+            'La Habana': u'LA HABANA',
+            'Varadero': u'VARADERO',
+            'Cienfuegos': u'CIENFUEGOS',
+            'Cayo Coco': u'CAYO COCO',
+            'Camaguey': u'CAMAGÜEY',
+            'Holguin': u'HOLGUIN',
+            'Santiago de Cuba': u'SANTIAGO DE CUBA'}
