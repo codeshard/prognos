@@ -52,6 +52,7 @@ class CubanWeather(object):
         urllib2.install_opener(opener)
 
     def fetch_weather(self, location):
+        title = u''
         values = []
         conn = urllib2.urlopen(u'http://www.met.inf.cu/asp/genesis.asp?TB0=RSSFEED')
         t_data = conn.read()
@@ -71,11 +72,11 @@ class CubanWeather(object):
         self.weather_data['current_night_temp'] = values[2]
         self.weather_data['current_day_weather'] = values[3]
         store_data = [
-            (int(self.year), int(self.month), int(values[0]), title.encode('utf-8').title(), int(values[1]), int(values[2]), str(values[3])),
-            (int(self.year), int(self.month), int(values[4]), title.encode('utf-8').title(), int(values[5]), int(values[6]), str(values[7])),
-            (int(self.year), int(self.month), int(values[8]), title.encode('utf-8').title(), int(values[9]), int(values[10]), str(values[11])),
-            (int(self.year), int(self.month), int(values[12]), title.encode('utf-8').title(), int(values[13]), int(values[14]), str(values[15])),
-            (int(self.year), int(self.month), int(values[16]), title.encode('utf-8').title(), int(values[17]), int(values[18]), str(values[19])),
+            (int(self.year), int(self.month), int(values[0]), title.encode('utf-8'), int(values[1]), int(values[2]), str(values[3])),
+            (int(self.year), int(self.month), int(values[4]), title.encode('utf-8'), int(values[5]), int(values[6]), str(values[7])),
+            (int(self.year), int(self.month), int(values[8]), title.encode('utf-8'), int(values[9]), int(values[10]), str(values[11])),
+            (int(self.year), int(self.month), int(values[12]), title.encode('utf-8'), int(values[13]), int(values[14]), str(values[15])),
+            (int(self.year), int(self.month), int(values[16]), title.encode('utf-8'), int(values[17]), int(values[18]), str(values[19])),
             ]
         self.db.insert_query(store_data)
         return self.weather_data
