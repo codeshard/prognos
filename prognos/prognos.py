@@ -30,6 +30,7 @@ from prognos_preferences import OptionsDialog
 from prognos_extended import ExtendedDialog
 from conditions import Locations
 from weather import CubanWeather
+from database import PrognosDB
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -102,6 +103,8 @@ class Prognos(QtGui.QMainWindow):
 
         self.cw = CubanWeather()
         self.location = Locations()
+        self.db = PrognosDB()
+        self.db.create_connection()
 
         self.load_data()
 
@@ -197,11 +200,84 @@ class Prognos(QtGui.QMainWindow):
     def get_current_date(self):
         self.week_day = time.strftime("%A")
         self.month = time.strftime("%b")
+        self.month_int = time.strftime("%m")
         self.day = time.strftime("%d")
         self.label_date.setText(str(self.week_day) + ", " + str(self.month) + " " + str(self.day))
 
     def gather_data(self):
-        pass
+        #check if the values already exists in the database, if not, read from the InsMet
+        settings = QtCore.QSettings(
+            QtCore.QDir.homePath() + '/.prognos/config.ini',
+            QtCore.QSettings.IniFormat)
+        prov = settings.value("location").toString()
+        data = self.db.select_query(self.month_int, self.day, prov)
+        if data:
+            for row in data:
+                day_hour  = time.strftime("%H")
+                if day_hour > '01' and day_hour < '18':
+                    self.label_temperature.setText(_translate(None, str(row[5]) + "°C", None))
+                else:
+                    self.label_temperature.setText(_translate(None, str(row[6]) + "°C", None))
+                self.label_weather_status.setText(_translate(None, str(row[7]), None))
+                icon = QtGui.QIcon()
+                if str(row[7]) == 'Lluvias Ocasionales':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
+
+                if str(row[7]) == 'Lluvias dispersas':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
+
+                if str(row[7]) == 'Lluvias aisladas':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-day.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-day.png"
+
+                if str(row[7]) == 'Lluvias en la Tarde':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-night.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-scattered-night.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-showers-scattered-night.png"
+
+                if str(row[7]) == 'Chubascos':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-showers-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-showers-day.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-showers-day.png"
+
+                if str(row[7]) == 'Parcialmente Nublado':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-few-clouds.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-few-clouds.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-few-clouds.png"
+
+                if str(row[7]) == 'Nublado':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-many-clouds.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-many-clouds.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-many-clouds.png"
+
+                if str(row[7]) == 'Soleado':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-clear.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-clear.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-clear.png"
+        self.setWindowTitle(str(prov).upper())
+        else:
+            print 'the other side of the moon'
 
     def load_data(self):
         settings = QtCore.QSettings(
