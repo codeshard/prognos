@@ -41,6 +41,7 @@ class PrognosDB(object):
 
     def create_table(self):
         self.cur.executescript("""
+            PRAGMA encoding="UTF-8";
             CREATE TABLE IF NOT EXISTS prognos(id INTEGER PRIMARY KEY AUTOINCREMENT, year INT, month INT, day INT, location TEXT,day_temp INT, night_temp INT, weather_status TEXT, date_created DATETIME DEFAULT current_timestamp, UNIQUE(year, month, day, location));
             CREATE INDEX IF NOT EXISTS idx_date ON prognos(year, month, day);
             """)
