@@ -85,7 +85,7 @@ class ExtendedDialog(QtGui.QDialog):
     def load_data(self, location):
         db = PrognosDB()
         db.create_connection()
-        data = db.select_query(location)
+        data = db.select_location(location)
         i = self.tableWidget.rowCount()
         self.tableWidget.setRowCount(i + len(data))
         for row in data:
