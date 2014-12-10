@@ -31,7 +31,7 @@ class Locations(object):
             'Cayo Coco': u'CAYO COCO',
             'Camaguey': u'CAMAGÜEY',
             'Holguin': u'HOLGUIN',
-            'Santiago de Cuba': u'SANTIAGO DE CUBA'}
+            'Santiago De Cuba': u'SANTIAGO DE CUBA'}
 
 class WeatherStatus(object):
     def __init__(self):
