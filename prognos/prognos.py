@@ -275,6 +275,14 @@ class Prognos(QtGui.QMainWindow):
                     self.trayIcon.setIcon(icon)
                     self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-clear.png"))
                     self.label_weather_image.filename = ":/actions/images/weather-clear.png"
+
+                if str(row[7]) == 'Tormentas':
+                    icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-storm-day.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                    self.setWindowIcon(icon)
+                    self.trayIcon.setIcon(icon)
+                    self.label_weather_image.setPixmap(QtGui.QPixmap(":/actions/images/weather-storm-day.png"))
+                    self.label_weather_image.filename = ":/actions/images/weather-storm-day.png"
+
         self.setWindowTitle(str(prov).upper())
         else:
             print 'the other side of the moon'
