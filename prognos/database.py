@@ -54,8 +54,13 @@ class PrognosDB(object):
         self.cur.executemany("INSERT INTO prognos(year, month, day, location, day_temp, night_temp, weather_status) VALUES(?, ?, ?, ?, ?, ?, ?)", params)
         self.connection.commit()
 
-    def select_query(self, params):
-        cmd = ("SELECT *  FROM 'main'.'prognos' WHERE location = '{p}';").format(p=params)
+    def select_location(self, params):
+        cmd = ("SELECT * FROM 'main'.'prognos' WHERE location = '{p}';").format(p=params)
+        data = self.cur.execute(cmd)
+        return data.fetchall()
+
+    def select_query(self, month, day, location):
+        cmd = ("SELECT * FROM 'main'.'prognos' WHERE month = '{m}' AND day = '{d}' AND location= '{l}';").format(m=month, d=day, l=location)
         data = self.cur.execute(cmd)
         return data.fetchall()
 
