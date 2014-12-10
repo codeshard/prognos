@@ -32,3 +32,16 @@ class Locations(object):
             'Camaguey': u'CAMAGÜEY',
             'Holguin': u'HOLGUIN',
             'Santiago de Cuba': u'SANTIAGO DE CUBA'}
+
+class WeatherStatus(object):
+    def __init__(self):
+        self.weather_status = {
+        'Lluvias Ocasionales': ':/actions/images/weather-showers-scattered-day.png',
+        'Lluvias dispersas': ':/actions/images/weather-showers-scattered-day.png',
+        'Lluvias aisladas': ':/actions/images/weather-showers-scattered-day.png',
+        'Lluvias en la Tarde': ':/actions/images/weather-showers-scattered-night.png',
+        'Chubascos': ':/actions/images/weather-showers-day.png',
+        'Parcialmente Nublado': ':/actions/images/weather-few-clouds.png',
+        'Nublado': ':/actions/images/weather-many-clouds.png',
+        'Soleado': ':/actions/images/weather-clear.png',
+        'Tormentas': ':/actions/images/weather-storm-day.png'}
