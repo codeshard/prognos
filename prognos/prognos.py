@@ -301,7 +301,7 @@ class Prognos(QtGui.QMainWindow):
                 self.update_ui(self.weather)
             else:
                 QtGui.QMessageBox.critical(None, "Prognos",
-                "Red no disponible o parametros de conexion mal configurados")
+                u"Red no disponible o parametros de conexión mal configurados.")
 
         self.setWindowTitle(_translate(None, prov, None))
 
