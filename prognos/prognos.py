@@ -273,7 +273,6 @@ class Prognos(QtGui.QMainWindow):
     def gather_data(self):
         #check if the values already exists in the database, if not, read from the InsMet
         prov = self.settings.value("location").toString()
-        print _translate(None, str(self.settings.value("location")), None)
         data = self.db.select_query(self.month_int, self.day, prov)
         self.day_hour  = time.strftime("%H")
         if data:
@@ -293,21 +292,17 @@ class Prognos(QtGui.QMainWindow):
             port = self.settings.value("port").toString()
             user = self.settings.value("user").toString()
             passwd = self.settings.value("passwd").toString()
-            self.cw.proxy_authenticate(host, port, user, passwd)
-            self.cw.fetch_weather(u'' + prov)
-            self.day_temp = self.cw.weather_data['current_day_temp']
-            self.night_temp = self.cw.weather_data['current_night_temp']
-            self.weather = self.cw.weather_data['current_day_weather']
-            self.update_ui(self.weather)
-            print self.cw.weather_data
+            if self.cw.proxy_authenticate(host, port, user, passwd):
+                self.cw.fetch_weather(u'' + prov)
+                self.day_temp = self.cw.weather_data['current_day_temp']
+                self.night_temp = self.cw.weather_data['current_night_temp']
+                self.weather = self.cw.weather_data['current_day_weather']
+                self.update_ui(self.weather)
+            else:
+                QtGui.QMessageBox.critical(None, "Prognos",
+                "Red no disponible o parametros de conexion mal configurados")
 
         self.setWindowTitle(_translate(None, prov, None))
-        self.settings.beginGroup("Weather")
-        self.settings.setValue("current_day_temp", int(self.day_temp))
-        self.settings.setValue("current_night_temp", int(self.night_temp))
-        self.settings.setValue("current_day_weather", str(self.weather))
-        self.settings.setValue("weather_pixmap", str(self.label_weather_image.filename))
-        self.settings.endGroup()
 
     def load_data(self):
         if self.settings.contains('Weather/current_day_temp'):
