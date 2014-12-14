@@ -91,15 +91,18 @@ class Prognos(QtGui.QMainWindow):
         icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-none-available.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
 
+        #time vars
+        self.day_hour  = time.strftime("%H")
+
         self.create_actions()
         self.create_toolbar()
-        self.create_tray_icon()
-        self.trayIcon.setIcon(QtGui.QIcon('":/actions/images/weather-none-available.png"'))
-        self.trayIcon.show()
 
         self.label_weather_image.filename = ''
         self.read_settings()
         self.get_current_date()
+
+        self.create_trayIcon()
+        self.trayIcon.show()
 
         self.cw = CubanWeather()
         self.location = Locations()
@@ -119,7 +122,7 @@ class Prognos(QtGui.QMainWindow):
         self.toolBar.addAction(self.quit_action)
         self.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
-    def create_tray_icon(self):
+    def create_trayIcon(self):
         self.trayIconMenu = QtGui.QMenu(self)
         self.trayIconMenu.addAction(self.minimize_action)
         self.trayIconMenu.addAction(self.restore_action)
@@ -131,8 +134,29 @@ class Prognos(QtGui.QMainWindow):
         self.trayIconMenu.addAction(self.quit_action)
         self.trayIcon = QtGui.QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
-        #self.trayIcon.activated.connect(self.tooltip_message)
-        self.trayIcon.setToolTip('<img src=":/actions/images/weather-clear.png" width="48" height="48"/>')
+        #self.trayIcon.setToolTip(u'La Habana, Cuba'
+            #u'<img src=":/actions/images/weather-clear.png" width="48" height="48"/><br>'
+            #u'<span style="font-weight:600;">16°C</span><br>'
+            #u'<span style="font-weight:600;">Tormentas</span>')
+        if self.day_hour > '01' and self.day_hour < '18':
+            self.show_trayIcon_message(
+                self.settings.value("location").toString(),
+                self.settings.value("Weather/weather_pixmap").toString(),
+                self.settings.value("Weather/current_day_temp").toString(),
+                self.settings.value("Weather/current_day_weather").toString())
+        else:
+            self.show_trayIcon_message(
+                self.settings.value("location").toString(),
+                self.settings.value("Weather/weather_pixmap").toString(),
+                self.settings.value("Weather/current_night_temp").toString(),
+                self.settings.value("Weather/current_day_weather").toString())
+
+    def show_trayIcon_message(self, location, pixmap, temp, weather):
+        tooltip_message = ('{l}, Cuba'
+            u'<img src="{p}" width="48" height="48"/><br>'
+            u'Temperatura: <span style="font-weight:600;">{t}°C</span><br>'
+            u'Pronóstico: <span style="font-weight:600;">{w}</span>').format(l=location, p=pixmap, t=temp, w=weather)
+        self.trayIcon.setToolTip(tooltip_message)
 
     def create_actions(self):
         self.minimize_action = QtGui.QAction(
@@ -275,7 +299,6 @@ class Prognos(QtGui.QMainWindow):
     def gather_data(self):
         prov = self.settings.value("location").toString().toUtf8()
         data = self.db.select_query(self.month_int, self.day, prov)
-        self.day_hour  = time.strftime("%H")
         if data:
             for row in data:
                 self.day_temp = row[5]
