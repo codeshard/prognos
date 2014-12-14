@@ -93,6 +93,10 @@ class Prognos(QtGui.QMainWindow):
 
         #time vars
         self.day_hour  = time.strftime("%H")
+        self.week_day = time.strftime("%A")
+        self.month = time.strftime("%b")
+        self.month_int = time.strftime("%m")
+        self.day = time.strftime("%d")
 
         self.create_actions()
         self.create_toolbar()
@@ -225,10 +229,6 @@ class Prognos(QtGui.QMainWindow):
         event.accept()
 
     def get_current_date(self):
-        self.week_day = time.strftime("%A")
-        self.month = time.strftime("%b")
-        self.month_int = time.strftime("%m")
-        self.day = time.strftime("%d")
         self.label_date.setText(str(self.week_day) + ", " + str(self.month) + " " + str(self.day))
 
     def update_ui(self, weather):
