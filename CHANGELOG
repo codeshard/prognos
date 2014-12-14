@@ -16,3 +16,11 @@
 - Changed window title to uppercase(i'm to lazy)
 - Working in offline version.
 - Added extended dialog
+
+2014-12-09
+- evaluates current date against a record in the database
+
+2014-12-14
+- Finally fixed unicode errors(thanks to Qt4 Unicode)
+- Added exception when network is unreachable.
+- Fixed TrayIcon
