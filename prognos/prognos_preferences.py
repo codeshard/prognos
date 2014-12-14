@@ -145,6 +145,7 @@ class OptionsDialog(QtGui.QDialog):
         settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
+        settings.setIniCodec("UTF-8")
         location = settings.value("location").toString()
         temperature = settings.value("temperature").toString()
         language = settings.value("language").toString()
@@ -169,6 +170,7 @@ class OptionsDialog(QtGui.QDialog):
         settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
+        settings.setIniCodec("UTF-8")
         settings.setValue("location", self.comboBox_location.currentText())
         settings.setValue("temperature", self.comboBox_temperature.currentText())
         settings.setValue("language", self.comboBox_language.currentText())

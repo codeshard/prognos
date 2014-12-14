@@ -175,6 +175,7 @@ class Prognos(QtGui.QMainWindow):
         self.settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
+        self.settings.setIniCodec("UTF-8")
         pos = self.settings.value(
             "pos",
             QtCore.QPoint(526, 238),
@@ -190,6 +191,7 @@ class Prognos(QtGui.QMainWindow):
         self.settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
+        self.settings.setIniCodec("UTF-8")
         self.settings.setValue("pos", self.pos())
         self.settings.setValue("size", self.size())
 
@@ -271,8 +273,7 @@ class Prognos(QtGui.QMainWindow):
             self.label_weather_image.filename = self.status.weather_status[weather]
 
     def gather_data(self):
-        #check if the values already exists in the database, if not, read from the InsMet
-        prov = self.settings.value("location").toString()
+        prov = self.settings.value("location").toString().toUtf8()
         data = self.db.select_query(self.month_int, self.day, prov)
         self.day_hour  = time.strftime("%H")
         if data:
@@ -313,8 +314,7 @@ class Prognos(QtGui.QMainWindow):
                 self.label_temperature.setText(_translate(None, self.settings.value("Weather/current_night_temp").toString() + "°C", None))
             self.label_weather_image.setPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString())))
             self.label_weather_status.setText(str(self.settings.value("Weather/current_day_weather").toString()))
-            #self.setWindowTitle(str(self.settings.value("location").toString()))
-            self.setWindowTitle(_translate(None, self.settings.value("location").toString(), None))
+            self.setWindowTitle(self.settings.value("location").toString())
         else:
             QtGui.QMessageBox.warning(None, "Prognos",
                 "Al parecer <b>Prognos</b> no se ha configurado para su uso "
