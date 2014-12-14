@@ -314,6 +314,10 @@ class Prognos(QtGui.QMainWindow):
                 self.label_temperature.setText(_translate(None, self.settings.value("Weather/current_night_temp").toString() + "°C", None))
             self.label_weather_image.setPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString())))
             self.label_weather_status.setText(str(self.settings.value("Weather/current_day_weather").toString()))
+            icon = QtGui.QIcon()
+            icon.addPixmap(QtGui.QPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString()))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.setWindowIcon(icon)
+            self.trayIcon.setIcon(icon)
             self.setWindowTitle(self.settings.value("location").toString())
         else:
             QtGui.QMessageBox.warning(None, "Prognos",
