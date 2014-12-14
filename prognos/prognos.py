@@ -311,10 +311,10 @@ class Prognos(QtGui.QMainWindow):
                 self.night_temp = row[6]
                 self.weather = row[7]
                 if self.day_hour > '01' and self.day_hour < '18':
-                    self.label_temperature.setText(self.calculate_temperature(row[5]))
+                    self.label_temperature.setText(self.calculate_temperature(self.day_temp))
                 else:
-                    self.label_temperature.setText(self.calculate_temperature(row[6]))
-                self.label_weather_status.setText(_translate(None, str(row[7]), None))
+                    self.label_temperature.setText(self.calculate_temperature(self.night_temp))
+                self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
         else:
             proxy = self.settings.value("proxy").toString()
@@ -327,6 +327,11 @@ class Prognos(QtGui.QMainWindow):
                 self.day_temp = self.cw.weather_data['current_day_temp']
                 self.night_temp = self.cw.weather_data['current_night_temp']
                 self.weather = self.cw.weather_data['current_day_weather']
+                if self.day_hour > '01' and self.day_hour < '18':
+                    self.label_temperature.setText(self.calculate_temperature(self.day_temp))
+                else:
+                    self.label_temperature.setText(self.calculate_temperature(self.night_temp))
+                self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
             else:
                 QtGui.QMessageBox.critical(None, "Prognos",
