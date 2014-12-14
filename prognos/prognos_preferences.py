@@ -155,7 +155,7 @@ class OptionsDialog(QtGui.QDialog):
         user = settings.value("user").toString()
         passwd = settings.value("passwd").toString()
         self.comboBox_location.setCurrentIndex(self.comboBox_location.findText(location))
-        self.comboBox_temperature.setCurrentIndex(self.comboBox_temperature.findText(temperature))
+        self.comboBox_temperature.setCurrentIndex(int(temperature))
         self.comboBox_language.setCurrentIndex(self.comboBox_language.findText(language))
         if proxy == 'true':
             self.checkBox.setChecked(True)
@@ -172,7 +172,7 @@ class OptionsDialog(QtGui.QDialog):
             QtCore.QSettings.IniFormat)
         settings.setIniCodec("UTF-8")
         settings.setValue("location", self.comboBox_location.currentText())
-        settings.setValue("temperature", self.comboBox_temperature.currentText())
+        settings.setValue("temperature", self.comboBox_temperature.currentIndex())
         settings.setValue("language", self.comboBox_language.currentText())
         settings.setValue("proxy", self.checkBox.isChecked())
         settings.setValue("host", self.lineEdit_host.text())

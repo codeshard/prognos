@@ -31,6 +31,7 @@ from prognos_extended import ExtendedDialog
 from conditions import Locations, WeatherStatus
 from weather import CubanWeather
 from database import PrognosDB
+from util import ConvertTemperature
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -113,6 +114,7 @@ class Prognos(QtGui.QMainWindow):
         self.status = WeatherStatus()
         self.db = PrognosDB()
         self.db.create_connection()
+        self.ct = ConvertTemperature()
 
         self.load_data()
 
@@ -292,6 +294,14 @@ class Prognos(QtGui.QMainWindow):
             self.label_weather_image.setPixmap(QtGui.QPixmap(self.status.weather_status[weather]))
             self.label_weather_image.filename = self.status.weather_status[weather]
 
+    def calculate_temperature(self, temp):
+        if self.settings.value("temperature").toString() == '0':
+            return u' '.join([self.ct.convert_temp('0', temp), u'°C'])
+        elif self.settings.value("temperature").toString() == '1':
+            return u' '.join([self.ct.convert_temp('1', temp), u'°F'])
+        elif self.settings.value("temperature").toString() == '2':
+            return u' '.join([self.ct.convert_temp('2', temp), 'K'])
+
     def gather_data(self):
         prov = self.settings.value("location").toString().toUtf8()
         data = self.db.select_query(self.month_int, self.day, prov)
@@ -301,9 +311,9 @@ class Prognos(QtGui.QMainWindow):
                 self.night_temp = row[6]
                 self.weather = row[7]
                 if self.day_hour > '01' and self.day_hour < '18':
-                    self.label_temperature.setText(_translate(None, str(row[5]) + "°C", None))
+                    self.label_temperature.setText(self.calculate_temperature(row[5]))
                 else:
-                    self.label_temperature.setText(_translate(None, str(row[6]) + "°C", None))
+                    self.label_temperature.setText(self.calculate_temperature(row[6]))
                 self.label_weather_status.setText(_translate(None, str(row[7]), None))
                 self.update_ui(self.weather)
         else:
@@ -328,9 +338,9 @@ class Prognos(QtGui.QMainWindow):
         if self.settings.contains('Weather/current_day_temp'):
             day_hour  = time.strftime("%H")
             if day_hour > '01' and day_hour < '18':
-                self.label_temperature.setText(_translate(None, self.settings.value("Weather/current_day_temp").toString() + "°C", None))
+                self.label_temperature.setText(self.calculate_temperature(self.settings.value("Weather/current_day_temp").toString()))
             else:
-                self.label_temperature.setText(_translate(None, self.settings.value("Weather/current_night_temp").toString() + "°C", None))
+                self.label_temperature.setText(self.calculate_temperature(self.settings.value("Weather/current_night_temp").toString()))
             self.label_weather_image.setPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString())))
             self.label_weather_status.setText(str(self.settings.value("Weather/current_day_weather").toString()))
             icon = QtGui.QIcon()

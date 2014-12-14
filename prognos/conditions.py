@@ -45,3 +45,10 @@ class WeatherStatus(object):
         'Nublado': ':/actions/images/weather-many-clouds.png',
         'Soleado': ':/actions/images/weather-clear.png',
         'Tormentas': ':/actions/images/weather-storm-day.png'}
+
+class Temperatures(object):
+    def __init__(self):
+        self.temperatures = {
+        '0': 'Celcius °C',
+        '1': 'Fahrenheit °F',
+        '2': 'Kelvin K'}

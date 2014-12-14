@@ -24,21 +24,14 @@ class ConvertTemperature(object):
     def __init__(self):
         pass
 
-    def convert_temp(self, from, to, input):
-        input = float(str(str_input))
+    def convert_temp(self, t_to, t_input):
+        input = float(str(t_input))
         output = 0
 
-        if str_from == "kelvin":
-            input *= 1
-        elif str_from == "degree Celsius":
-            input += 273.15
-        elif str_from == "degree Fahrenheit":
-            input = (input + 459.67) / 1.8
-
-        if str_to == "kelvin":
+        if t_to == "0":
             output = input
-        elif str_to == "degree Celsius":
-            output = input - 273.15
-        elif str_to == "degree Fahrenheit":
-            output = (input  * 1.8) - 459.67
+        elif t_to == "1":
+            output = ((input + 273.15) * 1.8) - 459.67
+        elif t_to == "2":
+            output = input + 273.15
         return str(output)
