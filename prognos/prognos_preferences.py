@@ -54,7 +54,7 @@ class OptionsDialog(QtGui.QDialog):
         self.comboBox_location.addItem("VARADERO")
         self.comboBox_location.addItem("CIENFUEGOS")
         self.comboBox_location.addItem("CAYO COCO")
-        self.comboBox_location.addItem(_translate(None, "CAMAGÜEY", None))
+        self.comboBox_location.addItem(u"CAMAGÜEY")
         self.comboBox_location.addItem("HOLGUIN")
         self.comboBox_location.addItem("SANTIAGO DE CUBA")
         self.horizontalLayout.addWidget(self.comboBox_location)
@@ -155,7 +155,7 @@ class OptionsDialog(QtGui.QDialog):
         passwd = settings.value("passwd").toString()
         self.comboBox_location.setCurrentIndex(self.comboBox_location.findText(location))
         self.comboBox_temperature.setCurrentIndex(self.comboBox_temperature.findText(temperature))
-        self.comboBox_language.setCurrentIndex(self.comboBox_language.findText(temperature))
+        self.comboBox_language.setCurrentIndex(self.comboBox_language.findText(language))
         if proxy == 'true':
             self.checkBox.setChecked(True)
         else:
@@ -169,7 +169,7 @@ class OptionsDialog(QtGui.QDialog):
         settings = QtCore.QSettings(
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
-        settings.setValue("location", _translate(None, self.comboBox_location.currentText(), None))
+        settings.setValue("location", self.comboBox_location.currentText())
         settings.setValue("temperature", self.comboBox_temperature.currentText())
         settings.setValue("language", self.comboBox_language.currentText())
         settings.setValue("proxy", self.checkBox.isChecked())
