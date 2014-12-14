@@ -138,10 +138,6 @@ class Prognos(QtGui.QMainWindow):
         self.trayIconMenu.addAction(self.quit_action)
         self.trayIcon = QtGui.QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
-        #self.trayIcon.setToolTip(u'La Habana, Cuba'
-            #u'<img src=":/actions/images/weather-clear.png" width="48" height="48"/><br>'
-            #u'<span style="font-weight:600;">16°C</span><br>'
-            #u'<span style="font-weight:600;">Tormentas</span>')
         if self.day_hour > '01' and self.day_hour < '18':
             self.show_trayIcon_message(
                 self.settings.value("location").toString(),
@@ -364,7 +360,7 @@ class Prognos(QtGui.QMainWindow):
         opt.show()
 
     def extended(self):
-        prov = self.settings.value("location").toString()
+        prov = self.settings.value("location").toString().toUtf8()
         ext = ExtendedDialog(self)
         ext.load_data(prov)
         ext.show()
