@@ -132,6 +132,10 @@ class OptionsDialog(QtGui.QDialog):
         self.label_4.setText(_translate(None, self.tr("Contraseña:"), None))
 
         self.checkBox.stateChanged.connect(self.auth_tokens)
+
+        self.comboBox_location.activated.connect(self.show_info)
+        self.comboBox_temperature.activated.connect(self.show_info)
+
         self._init()
         self.auth_tokens()
 
@@ -184,3 +188,8 @@ class OptionsDialog(QtGui.QDialog):
             self.lineEdit_port.setEnabled(False)
             self.lineEdit_user.setEnabled(False)
             self.lineEdit_passwd.setEnabled(False)
+
+    def show_info(self):
+        QtGui.QMessageBox.information(None, "Prognos",
+                u"Pulse <b>Actualizar</b> desde la ventana principal para los"
+                " nuevos cambios.")
