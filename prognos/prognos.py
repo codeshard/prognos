@@ -322,7 +322,7 @@ class Prognos(QtGui.QMainWindow):
             port = self.settings.value("port").toString()
             user = self.settings.value("user").toString()
             passwd = self.settings.value("passwd").toString()
-            if self.cw.proxy_authenticate(host, port, user, passwd):
+            if not self.cw.proxy_authenticate(host, port, user, passwd):
                 self.cw.fetch_weather(u'' + prov)
                 self.day_temp = self.cw.weather_data['current_day_temp']
                 self.night_temp = self.cw.weather_data['current_night_temp']
@@ -362,6 +362,7 @@ class Prognos(QtGui.QMainWindow):
 
     def save_data(self):
         if self.cw.weather_data:
+            self.settings.setIniCodec("UTF-8")
             self.settings.beginGroup("Weather")
             self.settings.setValue("current_month_day", str(self.cw.weather_data['current_month_day']))
             self.settings.setValue("current_day_temp", int(self.cw.weather_data['current_day_temp']))

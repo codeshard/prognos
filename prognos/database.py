@@ -21,6 +21,7 @@
 """
 
 import sys
+import time
 import sqlite3 as lite
 from os.path import expanduser, join
 
@@ -56,7 +57,8 @@ class PrognosDB(object):
         self.connection.commit()
 
     def select_location(self, params):
-        cmd = ("SELECT * FROM 'main'.'prognos' WHERE location = '{p}';").format(p=params)
+        t_day = int(time.strftime("%d")) - 1
+        cmd = ("SELECT * FROM 'main'.'prognos' WHERE location = '{p}' AND day > '{d}';").format(p=params, d=t_day)
         data = self.cur.execute(cmd)
         return data.fetchall()
 

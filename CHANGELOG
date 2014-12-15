@@ -24,3 +24,5 @@
 - Finally fixed unicode errors(thanks to Qt4 Unicode)
 - Added exception when network is unreachable.
 - Fixed TrayIcon
+- Added TrayIcon tooltip
+- Added new temperature measurements scales
