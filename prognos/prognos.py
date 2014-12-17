@@ -88,34 +88,43 @@ class Prognos(QtGui.QMainWindow):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle("Prognos")
+        #define a window icon temporaly
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/actions/images/weather-none-available.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/actions/images/weather-none-available.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-
         #time vars
         self.day_hour  = time.strftime("%H")
         self.week_day = time.strftime("%A")
         self.month = time.strftime("%b")
         self.month_int = time.strftime("%m")
         self.day = time.strftime("%d")
-
+        #actions for the toolbar
         self.create_actions()
+        #toolbar
         self.create_toolbar()
-
+        #var for image path
         self.label_weather_image.filename = ''
-        self.read_settings()
-        self.get_current_date()
-
-        self.create_trayIcon()
-        self.trayIcon.show()
-
-        self.cw = CubanWeather()
-        self.location = Locations()
-        self.status = WeatherStatus()
+        #database ver
         self.db = PrognosDB()
         self.db.create_connection()
+        #dicts for humanize work
+        self.location = Locations()
+        self.status = WeatherStatus()
+        #this is Rubiera's class
+        self.cw = CubanWeather()
+        #temperature in other scales
         self.ct = ConvertTemperature()
-
+        #set current date to prognos
+        self.get_current_date()
+        #read settings
+        self.read_settings()
+        #trayicon
+        self.create_trayIcon()
+        self.trayIcon.show()
+        #load data, if not, show the options dialog
         self.load_data()
 
     def create_toolbar(self):
@@ -140,18 +149,26 @@ class Prognos(QtGui.QMainWindow):
         self.trayIconMenu.addAction(self.quit_action)
         self.trayIcon = QtGui.QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
-        if self.day_hour > '01' and self.day_hour < '18':
-            self.show_trayIcon_message(
-                self.settings.value("location").toString(),
-                self.settings.value("Weather/weather_pixmap").toString(),
-                self.settings.value("Weather/current_day_temp").toString(),
-                self.settings.value("Weather/current_day_weather").toString())
-        else:
-            self.show_trayIcon_message(
-                self.settings.value("location").toString(),
-                self.settings.value("Weather/weather_pixmap").toString(),
-                self.settings.value("Weather/current_night_temp").toString(),
-                self.settings.value("Weather/current_day_weather").toString())
+        icon = QtGui.QIcon()
+        icon.addPixmap(
+            QtGui.QPixmap(":/actions/images/weather-none-available.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
+        self.trayIcon.setIcon(icon)
+
+        if self.settings.contains('Weather/current_day_temp'):
+            if self.day_hour > '01' and self.day_hour < '18':
+                self.show_trayIcon_message(
+                    self.settings.value("location").toString(),
+                    self.settings.value("Weather/weather_pixmap").toString(),
+                    self.settings.value("Weather/current_day_temp").toString(),
+                    self.settings.value("Weather/current_day_weather").toString())
+            else:
+                self.show_trayIcon_message(
+                    self.settings.value("location").toString(),
+                    self.settings.value("Weather/weather_pixmap").toString(),
+                    self.settings.value("Weather/current_night_temp").toString(),
+                    self.settings.value("Weather/current_day_weather").toString())
 
     def show_trayIcon_message(self, location, pixmap, temp, weather):
         tooltip_message = ('{l}, Cuba'
@@ -303,8 +320,13 @@ class Prognos(QtGui.QMainWindow):
             return u' '.join([self.ct.convert_temp('2', temp), 'K'])
 
     def gather_data(self):
-        prov = self.settings.value("location").toString().toUtf8()
-        data = self.db.select_query(self.month_int, self.day, prov)
+        prov = self.settings.value("location").toString().toUtf8().data()
+        if prov == u'PINAR DEL RIO':
+            prov = self.location.locations[prov]
+        data = self.db.select_query(
+            self.month_int,
+            self.day,
+            self.settings.value("location").toString().toUtf8().data())
         if data:
             for row in data:
                 self.day_temp = row[5]
@@ -317,13 +339,12 @@ class Prognos(QtGui.QMainWindow):
                 self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
         else:
-            proxy = self.settings.value("proxy").toString()
             host = self.settings.value("host").toString()
             port = self.settings.value("port").toString()
             user = self.settings.value("user").toString()
             passwd = self.settings.value("passwd").toString()
             if not self.cw.proxy_authenticate(host, port, user, passwd):
-                self.cw.fetch_weather(u'' + prov)
+                self.cw.fetch_weather(prov)
                 self.day_temp = self.cw.weather_data['current_day_temp']
                 self.night_temp = self.cw.weather_data['current_night_temp']
                 self.weather = self.cw.weather_data['current_day_weather']
@@ -333,6 +354,7 @@ class Prognos(QtGui.QMainWindow):
                     self.label_temperature.setText(self.calculate_temperature(self.night_temp))
                 self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
+                self.save_data()
             else:
                 QtGui.QMessageBox.critical(None, "Prognos",
                 u"Red no disponible o parametros de conexión mal configurados.")
@@ -343,13 +365,24 @@ class Prognos(QtGui.QMainWindow):
         if self.settings.contains('Weather/current_day_temp'):
             day_hour  = time.strftime("%H")
             if day_hour > '01' and day_hour < '18':
-                self.label_temperature.setText(self.calculate_temperature(self.settings.value("Weather/current_day_temp").toString()))
+                self.label_temperature.setText(
+                    self.calculate_temperature(
+                    self.settings.value("Weather/current_day_temp").toString()))
             else:
-                self.label_temperature.setText(self.calculate_temperature(self.settings.value("Weather/current_night_temp").toString()))
-            self.label_weather_image.setPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString())))
-            self.label_weather_status.setText(str(self.settings.value("Weather/current_day_weather").toString()))
+                self.label_temperature.setText(
+                    self.calculate_temperature(
+                        self.settings.value("Weather/current_night_temp").toString()))
+            self.label_weather_image.setPixmap(
+                QtGui.QPixmap(
+                    str(self.settings.value("Weather/weather_pixmap").toString())))
+            self.label_weather_status.setText(
+                str(self.settings.value("Weather/current_day_weather").toString()))
             icon = QtGui.QIcon()
-            icon.addPixmap(QtGui.QPixmap(QtGui.QPixmap(str(self.settings.value("Weather/weather_pixmap").toString()))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon.addPixmap(QtGui.QPixmap(
+                QtGui.QPixmap(
+                    str(self.settings.value("Weather/weather_pixmap").toString()))),
+                    QtGui.QIcon.Normal,
+                    QtGui.QIcon.Off)
             self.setWindowIcon(icon)
             self.trayIcon.setIcon(icon)
             self.setWindowTitle(self.settings.value("location").toString())
@@ -357,18 +390,27 @@ class Prognos(QtGui.QMainWindow):
             QtGui.QMessageBox.warning(None, "Prognos",
                 "Al parecer <b>Prognos</b> no se ha configurado para su uso "
                 "por favor, configure el programa...")
-            opt = OptionsDialog(self)
-            opt.show()
+            self.options()
 
     def save_data(self):
         if self.cw.weather_data:
             self.settings.setIniCodec("UTF-8")
             self.settings.beginGroup("Weather")
-            self.settings.setValue("current_month_day", str(self.cw.weather_data['current_month_day']))
-            self.settings.setValue("current_day_temp", int(self.cw.weather_data['current_day_temp']))
-            self.settings.setValue("current_night_temp", int(self.cw.weather_data['current_night_temp']))
-            self.settings.setValue("current_day_weather", str(self.cw.weather_data['current_day_weather']))
-            self.settings.setValue("weather_pixmap", str(self.label_weather_image.filename))
+            self.settings.setValue(
+                "current_month_day",
+                str(self.cw.weather_data['current_month_day']))
+            self.settings.setValue(
+                "current_day_temp",
+                int(self.cw.weather_data['current_day_temp']))
+            self.settings.setValue(
+                "current_night_temp",
+                int(self.cw.weather_data['current_night_temp']))
+            self.settings.setValue(
+                "current_day_weather",
+                str(self.cw.weather_data['current_day_weather']))
+            self.settings.setValue(
+                "weather_pixmap",
+                str(self.label_weather_image.filename))
             self.settings.endGroup()
 
     def options(self):
@@ -399,3 +441,6 @@ def main():
     prognos = Prognos()
     prognos.show()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()

@@ -26,11 +26,13 @@ import urllib2
 from lxml import etree
 
 from database import PrognosDB
+from conditions import Locations
 
 
 class CubanWeather(object):
     def __init__(self):
         self.weather_data = {}
+        self.location = Locations()
         self.db = PrognosDB()
         self.db.create_connection()
         self.db.create_table()
@@ -52,6 +54,8 @@ class CubanWeather(object):
         urllib2.install_opener(opener)
 
     def fetch_weather(self, location):
+        location = u''+location
+        print location
         title = u''
         values = []
         conn = urllib2.urlopen(u'http://www.met.inf.cu/asp/genesis.asp?TB0=RSSFEED')
@@ -60,12 +64,13 @@ class CubanWeather(object):
         t_root = etree.fromstring(t_data)
         item = t_root.findall('channel/title')
         for item in t_root.xpath('/rss/channel/item'):
-            if item.xpath(u"./title/text()")[0] == location:
+            if item.xpath(u"./title/text()")[0] == location.decode('utf-8'):
                 title = item.xpath(u"./title/text()")[0]
                 description = item.xpath("./description/text()")[0]
                 dataCrop = re.findall(r'<td>\W*?.*?</td>', description)
                 for data in dataCrop:
                     values.append(re.sub("<.*?>", "", data))
+        title = next((k for k, v in self.location.locations.items() if v == title), None)
         self.weather_data['location'] = title
         self.weather_data['current_month_day'] = values[0]
         self.weather_data['current_day_temp'] = values[1]

@@ -144,24 +144,33 @@ class OptionsDialog(QtGui.QDialog):
             QtCore.QDir.homePath() + '/.prognos/config.ini',
             QtCore.QSettings.IniFormat)
         settings.setIniCodec("UTF-8")
-        location = settings.value("location").toString()
-        temperature = settings.value("temperature").toString()
-        language = settings.value("language").toString()
-        proxy = settings.value("proxy").toString()
-        host = settings.value("host").toString()
-        port = settings.value("port").toString()
-        user = settings.value("user").toString()
-        passwd = settings.value("passwd").toString()
-        self.comboBox_location.setCurrentIndex(self.comboBox_location.findText(location))
-        self.comboBox_temperature.setCurrentIndex(int(temperature))
-        if proxy == 'true':
-            self.checkBox.setChecked(True)
+        if settings.contains("location"):
+            location = settings.value("location").toString()
+            temperature = settings.value("temperature").toString()
+            language = settings.value("language").toString()
+            proxy = settings.value("proxy").toString()
+            host = settings.value("host").toString()
+            port = settings.value("port").toString()
+            user = settings.value("user").toString()
+            passwd = settings.value("passwd").toString()
+            self.comboBox_location.setCurrentIndex(self.comboBox_location.findText(location))
+            self.comboBox_temperature.setCurrentIndex(int(temperature))
+            if proxy == 'true':
+                self.checkBox.setChecked(True)
+            else:
+                self.checkBox.setChecked(False)
+            self.lineEdit_host.setText(host)
+            self.lineEdit_port.setText(port)
+            self.lineEdit_user.setText(user)
+            self.lineEdit_passwd.setText(passwd)
         else:
+            self.comboBox_location.setCurrentIndex(0)
+            self.comboBox_temperature.setCurrentIndex(0)
             self.checkBox.setChecked(False)
-        self.lineEdit_host.setText(host)
-        self.lineEdit_port.setText(port)
-        self.lineEdit_user.setText(user)
-        self.lineEdit_passwd.setText(passwd)
+            self.lineEdit_host.setText("")
+            self.lineEdit_port.setText("")
+            self.lineEdit_user.setText("")
+            self.lineEdit_passwd.setText("")
 
     def _settings(self):
         settings = QtCore.QSettings(

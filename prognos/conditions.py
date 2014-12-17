@@ -24,14 +24,14 @@ class Locations(object):
     """dealing with malformed XML values"""
     def __init__(self):
         self.locations = {
-            'Pinar del Rio': u'Pronóstico Extendido del Tiempo por Ciudades',
-            'La Habana': u'LA HABANA',
-            'Varadero': u'VARADERO',
-            'Cienfuegos': u'CIENFUEGOS',
-            'Cayo Coco': u'CAYO COCO',
-            'Camaguey': u'CAMAGÜEY',
-            'Holguin': u'HOLGUIN',
-            'Santiago De Cuba': u'SANTIAGO DE CUBA'}
+            u'PINAR DEL RIO': u'Pronóstico Extendido del Tiempo por Ciudades',
+            u'LA HABANA': u'LA HABANA',
+            u'VARADERO': u'VARADERO',
+            u'CIENFUEGOS': u'CIENFUEGOS',
+            u'CAYO COCO': u'CAYO COCO',
+            u'CAMAGÜEY': u'CAMAGÜEY',
+            u'HOLGUIN': u'HOLGUIN',
+            u'SANTIAGO DE CUBA': u'SANTIAGO DE CUBA'}
 
 class WeatherStatus(object):
     def __init__(self):
@@ -45,10 +45,3 @@ class WeatherStatus(object):
         'Nublado': ':/actions/images/weather-many-clouds.png',
         'Soleado': ':/actions/images/weather-clear.png',
         'Tormentas': ':/actions/images/weather-storm-day.png'}
-
-class Temperatures(object):
-    def __init__(self):
-        self.temperatures = {
-        '0': 'Celcius °C',
-        '1': 'Fahrenheit °F',
-        '2': 'Kelvin K'}
