@@ -1,57 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Metas -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
-    <meta name="description" content="Posts and writings by {{ AUTHOR }}">
+    <meta name="description" content="Prognos">
     <meta name="keywords" content="prognos, clima, pyqt4, python">
     <meta name="author" content="Ozkar L. Garcell">
-    <!-- End Metas -->
-
-    <!-- CSS -->
     <link href="http://127.0.0.1:8000/theme/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://127.0.0.1:8000/theme/css/prognos.css" rel="stylesheet">
-    <!-- End CSS -->
-    <!-- Favicon -->
     <link rel="shortcut icon" href="http://127.0.0.1:8000/images/prognos.ico">
-    <!-- Favicon -->
-
     <title> Prognos </title>
   </head>
 <body>
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="cover-container">
-                <div class="masthead clearfix">
-                    <div class="inner">
-                        <h3 class="masthead-brand"><a href="http://127.0.0.1:8000">Codeshard</a></h3>
-                        <ul class="nav masthead-nav">
-                            <li><a href="#">Inicio</a></li>
-                            <li><a href="characteristics.html">Caracter&iacute;sticas</a></li>
-                            <li><a href="snapshots.html">Capturas</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="inner cover">
-                    <h1 class="cover-heading">Prognos.</h1>
-                    <p class="lead">Prognos (del griego <em>prognostikon</em>) es una aplicación para monitorear el estado del tiempo en Cuba, usando como orígenes de datos la web del <a href="www.met.inf.cu">Instituto de Meteorología de la República de Cuba</a>.</p>
-                    <p class="lead">
-                        <a href="https://github.com/codeshard/prognos/zipball/master" class="btn btn-lg btn-default"><img src="http://127.0.0.1:8000/images/zip-icon.png"> Descargar .zip</a>
-                        <a href="https://github.com/codeshard/prognos/tarball/master" class="btn btn-lg btn-default"><img src="http://127.0.0.1:8000/images/tar-gz-icon.png"> Descargar .tar.gz</a>
-                        <a href="https://github.com/codeshard/prognos" class="btn btn-lg btn-default"><img src="http://127.0.0.1:8000/images/octocat-icon.png"> en GitHub</a>
-                    </p>
-                </div>
-                <div class="mastfoot">
-                    <div class="inner">
-                        <p>&copy; 2014 Prognos es desarrollado por <a href="https://github.com/codeshard">Ozkar L. Garcell</a>.</p>
-                    </div>
-                </div>
+    <body>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Prognos</h1>
+              <p>Prognos, (del griego <em>prognostikon</em>) es una aplicación para monitorear el estado del tiempo en Cuba.</p>
+              <p><a class="btn btn-lg btn-primary" href="https://github.com/codeshard/prognos/zipball/master" role="button"><img src="http://127.0.0.1:8000/images/zip-icon.png"> Descargar .zip</a> <a class="btn btn-lg btn-primary" href="https://github.com/codeshard/prognos/tarball/master" role="button"><img src="http://127.0.0.1:8000/images/tar-gz-icon.png"> Descargar .tar.gz</a> <a class="btn btn-lg btn-primary" href="https://github.com/codeshard/prognos/" role="button"><img src="http://127.0.0.1:8000/images/octocat-icon.png"> ver en GitHub</a></p>
             </div>
+          </div>
         </div>
+    </div>
+
+    <div class="container marketing">
+      <hr class="featurette-divider">
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading"><span class="text-muted">Interfaz simple e intuitiva.</span></h2>
+          <p class="lead">Prognos posee una interfaz simple, brinda la informaci&oacute;n de forma intuitiva, limpia y visualmente atractiva.</p>
+        </div>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive img-thumbnail" src="http://127.0.0.1:8000/images/main.png" alt="Ventana Principal">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive img-thumbnail" src="http://127.0.0.1:8000/images/extended.png" alt="Extendido">
+        </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading"><span class="text-muted">Pron&oacute;stico Extendido.</span></h2>
+          <p class="lead">Prognos guarda el pron&oacute;stico para los d&iacute;s venideros, as&iacute;, En caso de que no tenga acceso a la red, Prognos actualiza pron&oacute;stico para el d&iacute;a en curso y los 5 d&iacute;as posteriores.</p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading"><span class="text-muted">Configurable.</span></h2>
+          <p class="lead">Prognos posee una interfaz de configuraci&oacute;n sencilla y clara, nada de controles y caracter&iacute;sticas complejas.</p>
+        </div>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive img-thumbnail" src="http://127.0.0.1:8000/images/options.png" alt="Opciones">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+      <footer>
+        <p class="pull-right"><a href="#">Volver al inicio</a></p>
+        <p>&copy; 2014 &middot; <a href="https://github.com/codeshard">Ozkar L. Garcell</p>
+      </footer>
+
     </div>
 </body>
 
