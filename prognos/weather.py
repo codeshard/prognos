@@ -54,8 +54,6 @@ class CubanWeather(object):
         urllib2.install_opener(opener)
 
     def fetch_weather(self, location):
-        location = u''+location
-        print location
         title = u''
         values = []
         conn = urllib2.urlopen(u'http://www.met.inf.cu/asp/genesis.asp?TB0=RSSFEED')
@@ -64,7 +62,7 @@ class CubanWeather(object):
         t_root = etree.fromstring(t_data)
         item = t_root.findall('channel/title')
         for item in t_root.xpath('/rss/channel/item'):
-            if item.xpath(u"./title/text()")[0] == location.decode('utf-8'):
+            if item.xpath(u"./title/text()")[0] == location:
                 title = item.xpath(u"./title/text()")[0]
                 description = item.xpath("./description/text()")[0]
                 dataCrop = re.findall(r'<td>\W*?.*?</td>', description)
