@@ -321,6 +321,8 @@ class Prognos(QtGui.QMainWindow):
 
     def gather_data(self):
         prov = self.settings.value("location").toString().toUtf8().data()
+        if prov == 'CAMAGÜEY':
+            prov = u'CAMAGÜEY'
         if prov == u'PINAR DEL RIO':
             prov = self.location.locations[prov]
         data = self.db.select_query(
@@ -358,8 +360,8 @@ class Prognos(QtGui.QMainWindow):
             else:
                 QtGui.QMessageBox.critical(None, "Prognos",
                 u"Red no disponible o parametros de conexión mal configurados.")
-
-        self.setWindowTitle(_translate(None, prov, None))
+        title = self.settings.value("location").toString().toUtf8().data()
+        self.setWindowTitle(_translate(None, title, None))
 
     def load_data(self):
         if self.settings.contains('Weather/current_day_temp'):
@@ -441,6 +443,3 @@ def main():
     prognos = Prognos()
     prognos.show()
     sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()
