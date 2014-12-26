@@ -155,7 +155,16 @@ class Prognos(QtGui.QMainWindow):
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off)
         self.trayIcon.setIcon(icon)
+        self.update_trayIcon_message()
 
+    def show_trayIcon_message(self, location, pixmap, temp, weather):
+        tooltip_message = ('{l}, Cuba'
+            u'<img src="{p}" width="48" height="48"/><br>'
+            u'Temperatura: <span style="font-weight:600;">{t}°C</span><br>'
+            u'Pronóstico: <span style="font-weight:600;">{w}</span>').format(l=location, p=pixmap, t=temp, w=weather)
+        self.trayIcon.setToolTip(tooltip_message)
+
+    def update_trayIcon_message(self):
         if self.settings.contains('Weather/current_day_temp'):
             if self.day_hour > '01' and self.day_hour < '18':
                 self.show_trayIcon_message(
@@ -169,13 +178,6 @@ class Prognos(QtGui.QMainWindow):
                     self.settings.value("Weather/weather_pixmap").toString(),
                     self.settings.value("Weather/current_night_temp").toString(),
                     self.settings.value("Weather/current_day_weather").toString())
-
-    def show_trayIcon_message(self, location, pixmap, temp, weather):
-        tooltip_message = ('{l}, Cuba'
-            u'<img src="{p}" width="48" height="48"/><br>'
-            u'Temperatura: <span style="font-weight:600;">{t}°C</span><br>'
-            u'Pronóstico: <span style="font-weight:600;">{w}</span>').format(l=location, p=pixmap, t=temp, w=weather)
-        self.trayIcon.setToolTip(tooltip_message)
 
     def create_actions(self):
         self.minimize_action = QtGui.QAction(
@@ -340,6 +342,7 @@ class Prognos(QtGui.QMainWindow):
                     self.label_temperature.setText(self.calculate_temperature(self.night_temp))
                 self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
+                self.update_trayIcon_message()
         else:
             host = self.settings.value("host").toString()
             port = self.settings.value("port").toString()
@@ -357,6 +360,7 @@ class Prognos(QtGui.QMainWindow):
                 self.label_weather_status.setText(_translate(None, str(self.weather), None))
                 self.update_ui(self.weather)
                 self.save_data()
+                self.update_trayIcon_message()
             else:
                 QtGui.QMessageBox.critical(None, "Prognos",
                 u"Red no disponible o parametros de conexión mal configurados.")
