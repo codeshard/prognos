@@ -23,13 +23,16 @@
 import sys
 import time
 import sqlite3 as lite
-from os.path import expanduser, join
+from os import makedirs
+from os.path import expanduser, join, exists
 
 from PyQt4 import QtGui
 
 class PrognosDB(object):
 
     def __init__(self):
+        if not exists(join(expanduser("~"), '.prognos')):
+            makedirs(join(expanduser("~"), '.prognos'))
         self.database_path = join(expanduser("~"), '.prognos/prognos.db')
 
     def create_connection(self):
@@ -38,7 +41,7 @@ class PrognosDB(object):
             self.connection.text_factory = str
             self.cur = self.connection.cursor()
         except lite.Error, e:
-            sys.exit(1)
+            print "Error %s:" % e.args[0]
 
     def create_table(self):
         self.cur.executescript("""

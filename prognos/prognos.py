@@ -110,6 +110,7 @@ class Prognos(QtGui.QMainWindow):
         #database ver
         self.db = PrognosDB()
         self.db.create_connection()
+        self.db.create_table()
         #dicts for humanize work
         self.location = Locations()
         self.status = WeatherStatus()
@@ -447,3 +448,6 @@ def main():
     prognos = Prognos()
     prognos.show()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
