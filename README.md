@@ -1,6 +1,7 @@
 prognos-qt
 ========
 [Prognos](http://codeshard.github.io/prognos)*(del griego prognostikon)* es una aplicación para monitorear el estado del tiempo en Cuba, usando como orígenes de datos la web del [Instituto de Meteorología de la República de Cuba](www.met.inf.cu).
+Prognos está inspirado en [meteo-qt](https://github.com/dglent/meteo-qt)
 
 ####Requerimientos
  - python-lxml
